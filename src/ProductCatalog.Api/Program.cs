@@ -41,13 +41,12 @@ app.MapGet("/health", () => Results.Ok(new
 .WithName("HealthCheck");
 
 // 2. Endpoint : consultation de tous les produits
-app.MapGet("/api/products", async (AppDbContext db) =>
+app.MapGet("/api/get-all-products", async (AppDbContext db) =>
     await db.Products.AsNoTracking().ToListAsync())
 .WithName("GetAllProducts");
 
 // 3. Endpoint : ajout d'un produit
-app.MapPost("/api/products", async (Product product, AppDbContext db) =>
-{
+app.MapPost("/api/create-product", async (Product product, AppDbContext db) =>{
     db.Products.Add(product);
     await db.SaveChangesAsync();
 
@@ -57,6 +56,7 @@ app.MapPost("/api/products", async (Product product, AppDbContext db) =>
 
 // 4. Endpoint : consultation d'un produit par ID
 app.MapGet("/api/get-product/{id:int}", async (int id, AppDbContext db) =>
+
 {
     var product = await db.Products.AsNoTracking()
         .FirstOrDefaultAsync(p => p.Id == id);
